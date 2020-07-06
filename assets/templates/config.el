@@ -1,0 +1,1 @@
+;; Rocket Emacs default configuration
