@@ -1,0 +1,2 @@
+* Rocket Emacs
+Please don't use, not usable at all.
