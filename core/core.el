@@ -109,15 +109,6 @@
         (rocket-emacs-create-personal-dir)
         (setq rocket-emacs-first-run-p nil)))
 
-  ;; Set UTF-8
-  (setq locale-coding-system 'utf-8
-        coding-system-for-read 'utf-8
-        coding-system-for-write 'utf-8)
-  (set-terminal-coding-system 'utf-8)
-  (set-keyboard-coding-system 'utf-8)
-  (set-selection-coding-system 'utf-8)
-  (prefer-coding-system 'utf-8)
-
   ;; Load features system then config system
   (load (concat rocket-emacs-core-dir "core-features") nil 'nomessage)
   (load (concat rocket-emacs-core-dir "core-config") nil 'nomessage)
