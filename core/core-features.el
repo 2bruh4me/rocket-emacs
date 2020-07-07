@@ -78,7 +78,8 @@
 
     ;; For example if the parent directory for a feature
     ;; is called auto-complete, it will try to execute
-    ;; rocket-emacs-auto-complete-feature-init
+    ;; rocket-emacs-auto-complete-feature-init, but only
+    ;; if auto-complete is in `rocket-emacs-enabled-features-list'
     (let ((x (s-split "/" feature-path t)))
       (let ((y (nth (- (length x) 2) x)))
         (add-to-list 'rocket-emacs-features-list y)

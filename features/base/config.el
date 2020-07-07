@@ -22,13 +22,12 @@
 
 ;;; Code:
 
-;; Keybinds
-(defun rocket-emacs-base-feature-keybinds-init ()
-  (bind!
-   :prefix "C-."
-   "f" 'find-file))
-
 (defun rocket-emacs-base-feature-init ()
+  ;; Keybinds
+  (defun rocket-emacs-base-feature-keybinds-init ()
+    (bind!
+     :prefix "C-."
+     "ff" 'find-file))
 
   ;; Disable default UI
   (tool-bar-mode -1)
