@@ -1,2 +1,5 @@
 * Rocket Emacs
 Please don't use, not usable at all.
+** Stuff
+*** TODO Finish base feature
+*** TODO Consider wrapping packages in an init function and only calling the function when you need the package

@@ -42,9 +42,4 @@
 ;; Initialize
 (rocket-emacs-init)
 
-;; Start server if not already started
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
 ;;; init.el ends here

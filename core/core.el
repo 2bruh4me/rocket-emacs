@@ -88,35 +88,31 @@
 
   ;; Check if Rocket Emacs already has been initialized
   (if rocket-emacs-init-p
-      (return-from rocket-emacs-init)
-    (message "Rocket Emacs is initializing"))
+      (cl-return-from rocket-emacs-init)
 
-  ;; Check if first run
-  (unless (file-directory-p rocket-emacs-personal-dir)
-    (setq rocket-emacs-first-run-p t))
+    ;; Check if first run
+    (unless (file-directory-p rocket-emacs-personal-dir)
+      (setq rocket-emacs-first-run-p t))
 
-  ;; Check operating system
-  (unless (eq rocket-emacs-system-type 'gnu/linux)
-    (error "There is only support for GNU/Linux at the moment"))
+    ;; Check for git executable
+    (unless (locate-file "git" exec-path)
+      (error "Please install git for Rocket Emacs to work"))
 
-  ;; Check for git executable
-  (unless (locate-file "git" exec-path)
-    (error "Please install git for Rocket Emacs to work"))
+    ;; If first run create all necessary files and restart
+    (if rocket-emacs-first-run-p
+        (progn
+          (rocket-emacs-create-personal-dir)))
 
-  ;; If first run create all necessary files and restart
-  (if rocket-emacs-first-run-p
-      (progn
-        (rocket-emacs-create-personal-dir)
-        (setq rocket-emacs-first-run-p nil)))
+    ;; Load features system then config system
+    (load (concat rocket-emacs-core-dir "core-features") nil 'nomessage)
+    (load (concat rocket-emacs-core-dir "core-config") nil 'nomessage)
+    (rocket-emacs-config-init)
+    (rocket-emacs-features-init)
 
-  ;; Load features system then config system
-  (load (concat rocket-emacs-core-dir "core-features") nil 'nomessage)
-  (load (concat rocket-emacs-core-dir "core-config") nil 'nomessage)
-  (rocket-emacs-config-init)
-  (rocket-emacs-features-init)
-
-  ;; Set garbage collection threshold
-  (setq gc-cons-threshold rocket-emacs-config-gc-threshold))
+    ;; Set garbage collection threshold and clear echo area
+    (add-hook 'after-init-hook
+              (lambda ()
+                (setq gc-cons-threshold rocket-emacs-config-gc-threshold)))))
 
 (provide 'rocket-emacs-core)
 ;;; core.el ends here
