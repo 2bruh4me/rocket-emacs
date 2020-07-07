@@ -22,6 +22,12 @@
 
 ;;; Code:
 
+;; Keybinds
+(defun rocket-emacs-base-feature-keybinds-init ()
+  (bind!
+   :prefix "C-."
+   "f" 'find-file))
+
 (defun rocket-emacs-base-feature-init ()
 
   ;; Disable default UI
@@ -68,7 +74,10 @@
   (defun rocket-emacs-dashboard ())
 
   ;; Add dashboard to startup hook
-  (add-hook 'emacs-startup-hook 'rocket-emacs-dashboard))
+  (add-hook 'emacs-startup-hook 'rocket-emacs-dashboard)
+
+  ;; Initialize keybinds
+  (rocket-emacs-base-feature-keybinds-init))
 
 (provide 'rocket-emacs-base-feature)
 ;;; base.el ends here

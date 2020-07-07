@@ -28,6 +28,10 @@
 (defvar rocket-emacs-enabled-features-list nil
   "Contains list of enabled features.")
 
+(defmacro bind! (&rest args)
+  "Acts as general-define-key."
+  `(general-define-key ,@args))
+
 (defun rocket-emacs-features-init ()
   "Initialize Rocket Emacs features system."
 
