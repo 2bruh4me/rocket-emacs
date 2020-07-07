@@ -32,6 +32,10 @@
   "Acts as general-define-key."
   `(general-define-key ,@args))
 
+(defun feature! (feature)
+  "Add FEATURE to `rocket-emacs-enabled-features-list'."
+  (add-to-list 'rocket-emacs-enabled-features-list (symbol-name feature)))
+
 (defun rocket-emacs-features-init ()
   "Initialize Rocket Emacs features system."
 
@@ -68,15 +72,18 @@
   (setq straight-use-package-by-default t)
 
   ;; Iterate through files in the features directory
-  (cl-dolist (feature (directory-files-recursively rocket-emacs-features-dir "config"))
+  (cl-dolist (feature-path (directory-files-recursively rocket-emacs-features-dir "config"))
     ;; Load the feature config.el
-    (load feature nil 'nomessage)
+    (load feature-path nil 'nomessage)
 
     ;; For example if the parent directory for a feature
     ;; is called auto-complete, it will try to execute
     ;; rocket-emacs-auto-complete-feature-init
-    (let ((x (s-split "/" feature t)))
-      (funcall (intern (concat "rocket-emacs-" (nth (- (length x) 2) x) "-feature-init"))))))
+    (let ((x (s-split "/" feature-path t)))
+      (let ((y (nth (- (length x) 2) x)))
+        (add-to-list 'rocket-emacs-features-list y)
+        (if (member y rocket-emacs-enabled-features-list)
+            (funcall (intern (concat "rocket-emacs-" y "-feature-init"))))))))
 
 (provide 'rocket-emacs-core-features)
 ;;; core-features.el ends here

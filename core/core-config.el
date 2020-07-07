@@ -22,11 +22,6 @@
 
 ;;; Code:
 
-(cl-defun use-feature! (feature)
-  "Add FEATURE to rocket-emacs-enabled-feature-list."
-  (dolist (feature features [nil])
-    (message feature)))
-
 (defun rocket-emacs-config-eval ()
   "Evaluate ~/.rocket-emacs/config.el."
   (condition-case nil
