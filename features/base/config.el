@@ -58,7 +58,7 @@
   (setq use-dialog-box nil)
 
   ;; Set window (frame) title
-  (setq frame-title-format '("Rocketmacs - %b")
+  (setq frame-title-format '("Rocket Emacs - %b")
         icon-title-format frame-title-format)
 
   ;; Set UTF-8
