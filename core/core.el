@@ -109,10 +109,6 @@
         (rocket-emacs-create-personal-dir)
         (setq rocket-emacs-first-run-p nil)))
 
-  ;; Load UI
-  (load (concat rocket-emacs-core-dir "core-ui") nil 'nomessage)
-  (rocket-emacs-ui-init)
-
   ;; Set UTF-8
   (setq locale-coding-system 'utf-8
         coding-system-for-read 'utf-8
