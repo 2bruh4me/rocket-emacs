@@ -53,8 +53,12 @@
   ;; Install dependencies
   (straight-use-package 's)
   (straight-use-package 'use-package)
+  (straight-use-package 'general)
+  (straight-use-package 'which-key)
   (require 's)
   (require 'use-package)
+  (require 'general)
+  (require 'which-key)
 
   ;; Set straight to use use-package
   (setq straight-use-package-by-default t)
