@@ -55,6 +55,8 @@
   (setq frame-title-format '("Rocketmacs - %b")
         icon-title-format frame-title-format)
 
+  (defun rocket-emacs-dashboard ())
+
   ;; Add dashboard to startup hook
   (add-hook 'emacs-startup-hook 'rocket-emacs-dashboard))
 
