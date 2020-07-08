@@ -1,7 +1,9 @@
-;;; config.el --- Dashboard for Rocket Emacs         -*- lexical-binding: t; -*-
+;;; config.el --- X window manager for Emacs         -*- lexical-binding: t; -*-
 
-;; Author: 2bruh4me
-;; URL: https://github.com/2bruh4me/rocket-emacs
+;; Copyright (C) 2020  weebojensen
+
+;; Author: weebojensen <weebojensen@wj01>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,20 +20,18 @@
 
 ;;; Commentary:
 
-;; Dashboard moment
+;; 
 
 ;;; Code:
 
-(defun rocket-emacs-dashboard-feature-init ()
-  "Initialize dashboard feature."
-  (define-derived-mode rocket-emacs/dashboard-mode special-mode "Dashboard")
-  
-  (defun rocket-emacs-dashboard ()
-    (switch-to-buffer (generate-new-buffer "Rocket Emacs Dashboard"))
-    (rocket-emacs/dashboard-mode))
-  
-  ;; Add dashboard to startup hook
-  (add-hook 'emacs-startup-hook 'rocket-emacs-dashboard))
+(defun rocket-emacs-exwm-feature-init()
+  (when (eq window-system 'x)
+    (use-package exwm
+      :defer nil
+      :config
+      (require 'exwm)
+      (require 'exwm-config)
+      (exwm-config-default))))
 
-(provide 'rocket-emacs-dashboard-feature)
+(provide 'rocket-emacs-exwm-feature)
 ;;; config.el ends here

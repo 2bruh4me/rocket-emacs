@@ -22,19 +22,22 @@
 
 ;;; Code:
 
-(defvar rocket-emacs-features-list nil
-  "Contains list of features.")
+(require 'cl-lib)
 
 (defvar rocket-emacs-enabled-features-list nil
   "Contains list of enabled features.")
 
 (defmacro bind! (&rest args)
   "Acts as general-define-key."
+  (declare (indent defun))
   `(general-define-key ,@args))
 
-(defun feature! (feature)
+(cl-defun feature! (feature &key set disabled)
   "Add FEATURE to `rocket-emacs-enabled-features-list'."
-  (add-to-list 'rocket-emacs-enabled-features-list (symbol-name feature)))
+  (declare (indent defun))
+  (unless disabled
+    (message set)
+    (add-to-list 'rocket-emacs-enabled-features-list (symbol-name feature))))
 
 (defun rocket-emacs-features-init ()
   "Initialize Rocket Emacs features system."
@@ -58,10 +61,8 @@
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (setq package-enable-at-startup nil)
 
-  ;; Install dependencies
-  (straight-use-package 's)
+  ;; Install dependency
   (straight-use-package 'use-package)
-  (require 's)
 
   ;; Set straight to use use-package
   (setq straight-use-package-by-default t)
@@ -73,18 +74,17 @@
 
   ;; Iterate through files in the features directory
   (cl-dolist (feature-path (directory-files-recursively rocket-emacs-features-dir "config"))
-    ;; Load the feature config.el
-    (load feature-path nil 'nomessage)
-
     ;; For example if the parent directory for a feature
     ;; is called auto-complete, it will try to execute
     ;; rocket-emacs-auto-complete-feature-init, but only
     ;; if auto-complete is in `rocket-emacs-enabled-features-list'
-    (let ((x (s-split "/" feature-path t)))
+    (let ((x (split-string feature-path "\\/" t)))
       (let ((y (nth (- (length x) 2) x)))
-        (add-to-list 'rocket-emacs-features-list y)
         (if (member y rocket-emacs-enabled-features-list)
-            (funcall (intern (concat "rocket-emacs-" y "-feature-init"))))))))
+	    ;; Load the feature's config.el and execute init function for that feature
+	    (progn
+	      (load feature-path nil 'nomessage)
+	      (funcall (intern (concat "rocket-emacs-" y "-feature-init")))))))))
 
 (provide 'rocket-emacs-core-features)
 ;;; core-features.el ends here

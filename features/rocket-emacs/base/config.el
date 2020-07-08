@@ -28,8 +28,8 @@
   ;; Deactivate input method function
   (defun rocket/reset-input-method ()
     (interactive)
-    (if current-input-method (progn
-                               (deactivate-input-method))))
+    (if current-input-method
+	(deactivate-input-method)))
 
   ;; Set input method function
   ;; TODO don't make this just a copy of set-input-method
@@ -85,8 +85,7 @@
   ;; Avoid GUI dialog
   (setq use-dialog-box nil)
 
-  ;; Set fundamental
-  (setq initial-major-mode 'fundamental-mode)
+  ;; Inhibit splash screen
   (setq inhibit-splash-screen t)
 
   ;; Set window (frame) title
@@ -130,8 +129,18 @@
     :straight nil
     :defer 2)
 
+  (use-package info+
+    :straight nil
+    :defer 2
+    :load-path "features/rocket-emacs/base/lisp/info+")
+
+  (use-package dired+
+    :straight nil
+    :defer 2
+    :load-path "features/rocket-emacs/base/lisp/dired+")
+
   (use-package ace-link
-    :defer t
+    :defer 2
     :init
     (with-eval-after-load 'info
       (define-key Info-mode-map "o" 'ace-link-info))

@@ -1,4 +1,4 @@
-;;; config.el --- Dashboard for Rocket Emacs         -*- lexical-binding: t; -*-
+;;; config.el --- Ivy feature                        -*- lexical-binding: t; -*-
 
 ;; Author: 2bruh4me
 ;; URL: https://github.com/2bruh4me/rocket-emacs
@@ -18,20 +18,28 @@
 
 ;;; Commentary:
 
-;; Dashboard moment
+;; 
 
 ;;; Code:
 
-(defun rocket-emacs-dashboard-feature-init ()
-  "Initialize dashboard feature."
-  (define-derived-mode rocket-emacs/dashboard-mode special-mode "Dashboard")
+(defun rocket-emacs-ivy-feature-init ()
+  (use-package counsel
+    :after ivy
+    :init
+    (counsel-mode 1))
   
-  (defun rocket-emacs-dashboard ()
-    (switch-to-buffer (generate-new-buffer "Rocket Emacs Dashboard"))
-    (rocket-emacs/dashboard-mode))
-  
-  ;; Add dashboard to startup hook
-  (add-hook 'emacs-startup-hook 'rocket-emacs-dashboard))
+  (use-package ivy
+    :defer 2
+    :init
+    (setq ivy-use-virtual-buffers t)
+    (ivy-mode 1))
 
-(provide 'rocket-emacs-dashboard-feature)
+  (use-package ivy-rich
+    :after ivy
+    :init
+    (ivy-rich-mode 1))
+
+  (use-package swiper
+    :after ivy))
+(provide 'rocket-emacs-ivy-feature)
 ;;; config.el ends here
