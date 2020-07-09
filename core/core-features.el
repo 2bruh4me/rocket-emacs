@@ -2,7 +2,7 @@
 
 (require 'cl-lib)
 
-(defvar rocket-emacs-enabled-features-list nil
+(defvar rocket-emacs-enabled-features-list '("base")
   "Contains list of enabled features.")
 
 (defmacro bind! (&rest args)
@@ -58,7 +58,7 @@
   (use-package general
     :defer t
     :commands (general-define-key))
-
+ 
   ;; Iterate through files in the features directory
   (cl-dolist (x (directory-files-recursively rocket-emacs-features-dir "config"))
     ;; For example if the parent directory for a feature
@@ -68,8 +68,8 @@
     (let ((feature-path (file-name-directory x)))
       (let ((y (split-string feature-path "\\/" t)))
 	(let ((feature (nth (- (length y) 1) y)))
-          (if (member feature rocket-emacs-enabled-features-list)
+          (if (or (member feature rocket-emacs-enabled-features-list))
 	      (progn
 		(load (concat feature-path "packages.el") t 'nomessage)
 		(load (concat feature-path "functions.el") t 'nomessage)
-		(load (concat feature-path "config.el") t 'nomessage))))))))
+		(load (concat feature-path "config.el") nil 'nomessage))))))))
