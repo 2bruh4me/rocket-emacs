@@ -1,33 +1,9 @@
-;;; core.el --- Core file for Rocket Emacs           -*- lexical-binding: t; -*-
-
-;; Author: 2bruh4me
-;; URL: https://github.com/2bruh4me/rocket-emacs
-
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
-
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-;;; Commentary:
-
-;; In this file we will define the function for initialization
-;; and also define some variables.
-;; CHECK FIRST RUN > LOAD UI > PARSE USER CONFIG > LOAD MODULES > LOAD DASHBOARD
-
-;;; Code:
+;;; core/core.el -*- lexical-binding: t; -*-
 
 ;; CL-lib for Common Lisp features
 (require 'cl-lib)
 
-(defconst rocket-emacs-version "0.0.1"
+(defconst rocket-emacs-version "0.0.2"
   "Version number for Rocket Emacs.")
 
 (defconst rocket-emacs-init-p nil
@@ -103,16 +79,10 @@
         (progn
           (rocket-emacs-create-personal-dir)))
 
-    ;; Load features system then config system
     (load (concat rocket-emacs-core-dir "core-features") nil 'nomessage)
-    (load (concat rocket-emacs-core-dir "core-config") nil 'nomessage)
-    (rocket-emacs-config-init)
     (rocket-emacs-features-init)
 
     ;; Set garbage collection threshold and clear echo area
     (add-hook 'after-init-hook
               (lambda ()
                 (setq gc-cons-threshold rocket-emacs-config-gc-threshold)))))
-
-(provide 'rocket-emacs-core)
-;;; core.el ends here

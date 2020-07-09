@@ -1,26 +1,4 @@
-;;; core-features.el --- Features system for Rocket Emacs  -*- lexical-binding: t; -*-
-
-;; Author: 2bruh4me
-;; URL: https://github.com/2bruh4me/rocket-emacs
-
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
-
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-;;; Commentary:
-
-;;
-
-;;; Code:
+;;; core/core-features.el -*- lexical-binding: t; -*-
 
 (require 'cl-lib)
 
@@ -32,15 +10,25 @@
   (declare (indent defun))
   `(general-define-key ,@args))
 
+;; (defmacro package! pkg)
+;; (declare (indent defun))
+;; `(straight-use-package-
+
 (cl-defun feature! (feature &key set disabled)
   "Add FEATURE to `rocket-emacs-enabled-features-list'."
   (declare (indent defun))
   (unless disabled
-    (message set)
     (add-to-list 'rocket-emacs-enabled-features-list (symbol-name feature))))
+
+(defun rocket-emacs-config-eval ()
+  "Evaluate ~/.rocket-emacs/config.el."
+  (condition-case nil
+      (load rocket-emacs-personal-config nil 'nomessage)
+    ((error "Error in config.el"))))
 
 (defun rocket-emacs-features-init ()
   "Initialize Rocket Emacs features system."
+  (rocket-emacs-config-eval)
 
   ;; Bootstrap straight.el
   (defvar bootstrap-version)
@@ -61,7 +49,6 @@
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (setq package-enable-at-startup nil)
 
-  ;; Install dependency
   (straight-use-package 'use-package)
 
   ;; Set straight to use use-package
@@ -73,18 +60,16 @@
     :commands (general-define-key))
 
   ;; Iterate through files in the features directory
-  (cl-dolist (feature-path (directory-files-recursively rocket-emacs-features-dir "config"))
+  (cl-dolist (x (directory-files-recursively rocket-emacs-features-dir "config"))
     ;; For example if the parent directory for a feature
     ;; is called auto-complete, it will try to execute
     ;; rocket-emacs-auto-complete-feature-init, but only
     ;; if auto-complete is in `rocket-emacs-enabled-features-list'
-    (let ((x (split-string feature-path "\\/" t)))
-      (let ((y (nth (- (length x) 2) x)))
-        (if (member y rocket-emacs-enabled-features-list)
-	    ;; Load the feature's config.el and execute init function for that feature
-	    (progn
-	      (load feature-path nil 'nomessage)
-	      (funcall (intern (concat "rocket-emacs-" y "-feature-init")))))))))
-
-(provide 'rocket-emacs-core-features)
-;;; core-features.el ends here
+    (let ((feature-path (file-name-directory x)))
+      (let ((y (split-string feature-path "\\/" t)))
+	(let ((feature (nth (- (length y) 1) y)))
+          (if (member feature rocket-emacs-enabled-features-list)
+	      (progn
+		(load (concat feature-path "packages.el") t 'nomessage)
+		(load (concat feature-path "functions.el") t 'nomessage)
+		(load (concat feature-path "config.el") t 'nomessage))))))))
