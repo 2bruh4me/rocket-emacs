@@ -1,8 +1,2 @@
 * Rocket Emacs
-Please don't use, not usable at all.
-** Stuff
-*** TODO Finish base feature
-*** TODO Consider wrapping packages in an init function and only calling the function when you need the package
-*** TODO Finish dashboard
-*** TODO Add all packages that need to be installed to a list and install them before using them
-*** TODO If first run present user with documentation and also some setup
+  Please don't use, somewhat usable though.
