@@ -19,6 +19,8 @@
 (scroll-bar-mode -1)
 (fringe-mode -1)
 
+;; Font
+
 ;; Use Y or N
 (defalias 'yes-or-no-p 'y-or-n-p)
 

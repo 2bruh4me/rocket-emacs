@@ -3,7 +3,7 @@
 ;; CL-lib for Common Lisp features
 (require 'cl-lib)
 
-(defconst rocket-emacs-version "0.0.2"
+(defconst rocket-emacs-version "0.0.3"
   "Version number for Rocket Emacs.")
 
 (defconst rocket-emacs-init-p nil

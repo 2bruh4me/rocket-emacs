@@ -10,14 +10,11 @@
   (declare (indent defun))
   `(general-define-key ,@args))
 
-;; (defmacro package! pkg)
-;; (declare (indent defun))
-;; `(straight-use-package-
-
 (cl-defun feature! (feature &key set disabled)
   "Add FEATURE to `rocket-emacs-enabled-features-list'."
   (declare (indent defun))
   (unless disabled
+    (set (intern (concat "rocket-emacs-" (symbol-name feature) "-feature-settings")) set)
     (add-to-list 'rocket-emacs-enabled-features-list (symbol-name feature))))
 
 (defun rocket-emacs-config-eval ()
@@ -62,9 +59,8 @@
   ;; Iterate through files in the features directory
   (cl-dolist (x (directory-files-recursively rocket-emacs-features-dir "config"))
     ;; For example if the parent directory for a feature
-    ;; is called auto-complete, it will try to execute
-    ;; rocket-emacs-auto-complete-feature-init, but only
-    ;; if auto-complete is in `rocket-emacs-enabled-features-list'
+    ;; is called auto-complete, it will try to load
+    ;; it's files if auto-complete is in `rocket-emacs-enabled-features-list'
     (let ((feature-path (file-name-directory x)))
       (let ((y (split-string feature-path "\\/" t)))
 	(let ((feature (nth (- (length y) 1) y)))
