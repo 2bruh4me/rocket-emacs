@@ -41,6 +41,8 @@
 
 (defconst rocket-emacs-personal-snippets-dir (concat rocket-emacs-personal-dir "snippets/"))
 
+(defconst rocket-emacs-personal-features-dir (concat rocket-emacs-personal-dir "features/"))
+
 ;; User configuration variables
 (defvar rocket-emacs-config-gc-threshold 800000)
 
