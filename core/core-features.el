@@ -2,7 +2,7 @@
 
 (require 'cl-lib)
 
-(defvar rocket-emacs-enabled-features-list '("base")
+(defvar rocket-emacs-enabled-features-list '()
   "Contains list of enabled features.")
 
 (defmacro bind! (&rest args)
