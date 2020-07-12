@@ -1,3 +1,5 @@
 ;; Rocket Emacs default configuration
 ;; Features
-(feature! 'base) ;; Base is a necessity
+(feature! 'base
+  :set
+  '((binds . emacs))) ;; Possible values are either 'emacs or 'evil

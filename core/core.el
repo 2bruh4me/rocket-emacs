@@ -3,7 +3,7 @@
 ;; CL-lib for Common Lisp features
 (require 'cl-lib)
 
-(defconst rocket-emacs-version "0.0.3"
+(defconst rocket-emacs-version "0.0.4"
   "Version number for Rocket Emacs.")
 
 (defconst rocket-emacs-init-p nil
@@ -72,11 +72,7 @@
     (unless (file-directory-p rocket-emacs-personal-dir)
       (setq rocket-emacs-first-run-p t))
 
-    ;; Check for git executable
-    (unless (locate-file "git" exec-path)
-      (error "Please install git for Rocket Emacs to work"))
-
-    ;; If first run create all necessary files and restart
+    ;; If first run create all necessary files
     (if rocket-emacs-first-run-p
         (progn
           (rocket-emacs-create-personal-dir)))
@@ -84,7 +80,7 @@
     (load (concat rocket-emacs-core-dir "core-features") nil 'nomessage)
     (rocket-emacs-features-init)
 
-    ;; Set garbage collection threshold and clear echo area
+    ;; Set garbage collection threshold
     (add-hook 'after-init-hook
               (lambda ()
                 (setq gc-cons-threshold rocket-emacs-config-gc-threshold)))))

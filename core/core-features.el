@@ -2,7 +2,7 @@
 
 (require 'cl-lib)
 
-(defvar rocket-emacs-enabled-features-list '()
+(defvar rocket-emacs-enabled-features '()
   "Contains list of enabled features.")
 
 (defmacro bind! (&rest args)
@@ -10,12 +10,12 @@
   (declare (indent defun))
   `(general-define-key ,@args))
 
-(cl-defun feature! (feature &key set disabled)
-  "Add FEATURE to `rocket-emacs-enabled-features-list'."
+(cl-defun feature! (feature &key set disabled after)
+  "Add FEATURE to `rocket-emacs-enabled-features'."
   (declare (indent defun))
   (unless disabled
     (set (intern (concat "rocket-emacs-" (symbol-name feature) "-feature-settings")) set)
-    (add-to-list 'rocket-emacs-enabled-features-list (symbol-name feature))))
+    (add-to-list 'rocket-emacs-enabled-features (symbol-name feature))))
 
 (defun rocket-emacs-config-eval ()
   "Evaluate ~/.rocket-emacs/config.el."
@@ -30,20 +30,19 @@
   ;; Bootstrap straight.el
   (defvar bootstrap-version)
   (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 5))
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
           (url-retrieve-synchronously
            "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
            'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
-  (require 'package)
   ;; Set package archvies and disable at startup
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (setq package-enable-at-startup nil)
 
   (straight-use-package 'use-package)
@@ -53,19 +52,10 @@
 
   ;; General.el
   (use-package general
-    :defer t
-    :commands (general-define-key))
- 
-  ;; Iterate through files in the features directory
-  (cl-dolist (x (directory-files-recursively rocket-emacs-features-dir "config"))
-    ;; For example if the parent directory for a feature
-    ;; is called auto-complete, it will try to load
-    ;; it's files if auto-complete is in `rocket-emacs-enabled-features-list'
-    (let ((feature-path (file-name-directory x)))
-      (let ((y (split-string feature-path "\\/" t)))
-	(let ((feature (nth (- (length y) 1) y)))
-          (if (or (member feature rocket-emacs-enabled-features-list))
-	      (progn
-		(load (concat feature-path "packages.el") t 'nomessage)
-		(load (concat feature-path "functions.el") t 'nomessage)
-		(load (concat feature-path "config.el") nil 'nomessage))))))))
+	       :defer t
+	       :commands (general-define-key))
+
+  (cl-dolist (feature rocket-emacs-enabled-features)
+    (load (concat rocket-emacs-features-dir feature "/packages.el") t 'nomessage)
+    (load (concat rocket-emacs-features-dir feature "/functions.el") t 'nomessage)
+    (load (concat rocket-emacs-features-dir feature "/config.el") nil 'nomessage)))
